@@ -1,5 +1,6 @@
 use crate::entities::SelectOptionCellDataPB;
 use crate::services::field::SelectOptionIds;
+use collab::core::any_map::{AnyMap, AnyMapExtension};
 use collab_database::database::gen_option_id;
 use serde::{Deserialize, Serialize};
 
@@ -29,6 +30,26 @@ impl SelectOption {
   }
 }
 
+impl From<AnyMap> for SelectOption {
+  fn from(map: AnyMap) -> Self {
+    SelectOption {
+      id: map.get_str("id").unwrap_or_default(),
+      name: map.get_str("name").unwrap_or_default(),
+      color: SelectOptionColor::from(map.get_i64_value("color").unwrap_or(0)),
+    }
+  }
+}
+
+impl From<SelectOption> for AnyMap {
+  fn from(option: SelectOption) -> Self {
+    let mut map = AnyMap::new();
+    map.insert_str_value("id", option.id);
+    map.insert_str_value("name", option.name);
+    map.insert_i64_value("color", option.color.into());
+    map
+  }
+}
+
 #[derive(PartialEq, Eq, Serialize, Deserialize, Debug, Clone)]
 #[repr(u8)]
 #[derive(Default)]
@@ -43,6 +64,29 @@ pub enum SelectOptionColor {
   Green = 6,
   Aqua = 7,
   Blue = 8,
+}
+
+impl From<i64> for SelectOptionColor {
+  fn from(value: i64) -> Self {
+    match value {
+      0 => SelectOptionColor::Purple,
+      1 => SelectOptionColor::Pink,
+      2 => SelectOptionColor::LightPink,
+      3 => SelectOptionColor::Orange,
+      4 => SelectOptionColor::Yellow,
+      5 => SelectOptionColor::Lime,
+      6 => SelectOptionColor::Green,
+      7 => SelectOptionColor::Aqua,
+      8 => SelectOptionColor::Blue,
+      _ => SelectOptionColor::default(),
+    }
+  }
+}
+
+impl From<SelectOptionColor> for i64 {
+  fn from(color: SelectOptionColor) -> Self {
+    color as i64
+  }
 }
 
 #[derive(Debug)]

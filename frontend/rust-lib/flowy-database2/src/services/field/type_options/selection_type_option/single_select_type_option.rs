@@ -20,6 +20,28 @@ use std::cmp::Ordering;
 pub struct SingleSelectTypeOption {
   pub options: Vec<SelectOption>,
   pub disable_color: bool,
+  #[serde(default)]
+  /// Version `0` means the [SingleSelectTypeOption] is serialized as a JSON string and stored in `TypeOptionData` as a string value.
+  /// Version `1` means the [SingleSelectTypeOption] uses different properties to store its values
+  pub version: i64,
+  #[serde(default)]
+  pub ai_fill_enabled: bool,
+  #[serde(default)]
+  pub generated_options: Vec<SelectOption>,
+}
+
+impl SingleSelectTypeOption {
+  pub fn options(&self) -> Vec<&SelectOption> {
+    if self.ai_fill_enabled {
+      self
+        .generated_options
+        .iter()
+        .chain(self.options.iter())
+        .collect()
+    } else {
+      self.options.iter().collect()
+    }
+  }
 }
 
 impl TypeOption for SingleSelectTypeOption {
@@ -31,18 +53,39 @@ impl TypeOption for SingleSelectTypeOption {
 
 impl From<TypeOptionData> for SingleSelectTypeOption {
   fn from(data: TypeOptionData) -> Self {
-    data
-      .get_str_value("content")
-      .map(|s| serde_json::from_str::<SingleSelectTypeOption>(&s).unwrap_or_default())
-      .unwrap_or_default()
+    let version = data.get_i64_value("version").unwrap_or(0);
+    match version {
+      0 => data
+        .get_str_value("content")
+        .map(|s| serde_json::from_str::<SingleSelectTypeOption>(&s).unwrap_or_default())
+        .unwrap_or_default(),
+      1 => {
+        //
+        let options = data.get_array::<_, SelectOption>("options");
+        let generated_options = data.get_array::<_, SelectOption>("generated_options");
+        let disable_color = data.get_bool_value("disable_color").unwrap_or(false);
+        let ai_fill_enabled = data.get_bool_value("ai_fill_enabled").unwrap_or(false);
+        Self {
+          options,
+          disable_color,
+          version,
+          ai_fill_enabled,
+          generated_options,
+        }
+      },
+      _ => SingleSelectTypeOption::default(),
+    }
   }
 }
 
 impl From<SingleSelectTypeOption> for TypeOptionData {
   fn from(data: SingleSelectTypeOption) -> Self {
-    let content = serde_json::to_string(&data).unwrap_or_default();
     TypeOptionDataBuilder::new()
-      .insert_str_value("content", content)
+      .insert_i64_value("version", data.version)
+      .insert_bool_value("disable_color", data.disable_color)
+      .insert_bool_value("ai_fill_enabled", data.ai_fill_enabled)
+      .insert_maps("options", data.options)
+      .insert_maps("generated_options", data.generated_options)
       .build()
   }
 }
