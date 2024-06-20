@@ -211,6 +211,12 @@ pub struct SingleSelectTypeOptionPB {
 
   #[pb(index = 2)]
   pub disable_color: bool,
+
+  #[pb(index = 3)]
+  ai_fill_enabled: bool,
+
+  #[pb(index = 4)]
+  generated_options: Vec<SelectOptionPB>,
 }
 
 impl From<SingleSelectTypeOption> for SingleSelectTypeOptionPB {
@@ -222,6 +228,12 @@ impl From<SingleSelectTypeOption> for SingleSelectTypeOptionPB {
         .map(|option| option.into())
         .collect(),
       disable_color: data.disable_color,
+      ai_fill_enabled: data.ai_fill_enabled,
+      generated_options: data
+        .generated_options
+        .into_iter()
+        .map(|option| option.into())
+        .collect(),
     }
   }
 }
@@ -235,6 +247,13 @@ impl From<SingleSelectTypeOptionPB> for SingleSelectTypeOption {
         .map(|option| option.into())
         .collect(),
       disable_color: data.disable_color,
+      version: 1,
+      ai_fill_enabled: data.ai_fill_enabled,
+      generated_options: data
+        .generated_options
+        .into_iter()
+        .map(|option| option.into())
+        .collect(),
     }
   }
 }

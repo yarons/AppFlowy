@@ -33,8 +33,8 @@ impl SelectOption {
 impl From<AnyMap> for SelectOption {
   fn from(map: AnyMap) -> Self {
     SelectOption {
-      id: map.get_str("id").unwrap_or_default(),
-      name: map.get_str("name").unwrap_or_default(),
+      id: map.get_str_value("id").unwrap_or_default(),
+      name: map.get_str_value("name").unwrap_or_default(),
       color: SelectOptionColor::from(map.get_i64_value("color").unwrap_or(0)),
     }
   }
