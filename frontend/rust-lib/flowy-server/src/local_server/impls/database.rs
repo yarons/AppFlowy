@@ -18,7 +18,7 @@ impl DatabaseCloudService for LocalServerDatabaseCloudServiceImpl {
       &self,
       object_id: &str,
       collab_type: CollabType,
-      workspace_id: &str,
+      _workspace_id: &str,
   ) -> FutureResult<Option<Vec<u8>>, Error> {
     let object_id = object_id.to_string();
     // create the minimal required data for the given collab type
@@ -63,9 +63,9 @@ impl DatabaseCloudService for LocalServerDatabaseCloudServiceImpl {
 
   fn batch_get_database_object_doc_state(
     &self,
-    object_ids: Vec<String>,
-    object_ty: CollabType,
-    workspace_id: &str,
+    _object_ids: Vec<String>,
+    _object_ty: CollabType,
+    _workspace_id: &str,
   ) -> FutureResult<CollabDocStateByOid, Error> {
     FutureResult::new(async move { Ok(CollabDocStateByOid::default()) })
   }
@@ -80,9 +80,9 @@ impl DatabaseCloudService for LocalServerDatabaseCloudServiceImpl {
 
   fn summary_database_row(
     &self,
-    workspace_id: &str,
-    object_id: &str,
-    summary_row: SummaryRowContent,
+    _workspace_id: &str,
+    _object_id: &str,
+    _summary_row: SummaryRowContent,
   ) -> FutureResult<String, FlowyError> {
     // TODO(lucas): local ai
     FutureResult::new(async move { Ok("".to_string()) })
@@ -90,9 +90,9 @@ impl DatabaseCloudService for LocalServerDatabaseCloudServiceImpl {
 
   fn translate_database_row(
     &self,
-    workspace_id: &str,
-    translate_row: TranslateRowContent,
-    language: &str,
+    _workspace_id: &str,
+    _translate_row: TranslateRowContent,
+    _language: &str,
   ) -> FutureResult<TranslateRowResponse, FlowyError> {
     // TODO(lucas): local ai
     FutureResult::new(async move { Ok(TranslateRowResponse::default()) })

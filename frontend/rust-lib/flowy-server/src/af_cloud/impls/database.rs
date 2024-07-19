@@ -125,7 +125,7 @@ where
   fn summary_database_row(
     &self,
     workspace_id: &str,
-    object_id: &str,
+    _object_id: &str,
     summary_row: SummaryRowContent,
   ) -> FutureResult<String, FlowyError> {
     let workspace_id = workspace_id.to_string();
