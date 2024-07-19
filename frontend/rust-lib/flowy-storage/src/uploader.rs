@@ -128,7 +128,7 @@ impl FileUploader {
       } => {
         let record = BoxAny::new(record);
         if let Err(err) = self.storage_service.start_upload(&chunks, &record).await {
-          if (err.is_file_limit_exceeded()) {
+          if err.is_file_limit_exceeded() {
             error!("Failed to upload file: {}", err);
             self.pause();
           }
@@ -159,7 +159,7 @@ impl FileUploader {
           .resume_upload(&workspace_id, &parent_dir, &file_id)
           .await
         {
-          if (err.is_file_limit_exceeded()) {
+          if err.is_file_limit_exceeded() {
             error!("Failed to upload file: {}", err);
             self.pause();
           }

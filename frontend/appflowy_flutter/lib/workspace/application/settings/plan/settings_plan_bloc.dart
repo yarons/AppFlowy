@@ -56,7 +56,7 @@ class SettingsPlanBloc extends Bloc<SettingsPlanEvent, SettingsPlanState> {
                     .firstWhereOrNull((i) => i.workspaceId == workspaceId) ??
                 WorkspaceSubscriptionPB(
                   workspaceId: workspaceId,
-                  subscriptionPlan: SubscriptionPlanPB.None,
+                  subscriptionPlan: SubscriptionPlanPB.Free,
                   isActive: true,
                 ),
             (f) {

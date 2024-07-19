@@ -181,10 +181,10 @@ class _SettingsPlanComparisonDialogState
                                 .tr(),
                             cells: _freeLabels,
                             isCurrent: currentSubscription.subscriptionPlan ==
-                                SubscriptionPlanPB.None,
+                                SubscriptionPlanPB.Free,
                             canDowngrade:
                                 currentSubscription.subscriptionPlan !=
-                                    SubscriptionPlanPB.None,
+                                    SubscriptionPlanPB.Free,
                             currentCanceled: currentSubscription.hasCanceled ||
                                 (context
                                         .watch<SettingsPlanBloc>()
@@ -197,7 +197,7 @@ class _SettingsPlanComparisonDialogState
                                     false),
                             onSelected: () async {
                               if (currentSubscription.subscriptionPlan ==
-                                      SubscriptionPlanPB.None ||
+                                      SubscriptionPlanPB.Free ||
                                   currentSubscription.hasCanceled) {
                                 return;
                               }
@@ -242,7 +242,7 @@ class _SettingsPlanComparisonDialogState
                             isCurrent: currentSubscription.subscriptionPlan ==
                                 SubscriptionPlanPB.Pro,
                             canUpgrade: currentSubscription.subscriptionPlan ==
-                                SubscriptionPlanPB.None,
+                                SubscriptionPlanPB.Free,
                             currentCanceled: currentSubscription.hasCanceled,
                             onSelected: () =>
                                 context.read<SettingsPlanBloc>().add(

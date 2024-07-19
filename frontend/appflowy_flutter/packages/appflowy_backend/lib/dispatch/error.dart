@@ -53,7 +53,7 @@ class StackTraceError {
 
 class ErrorCodeNotifier extends ChangeNotifier {
   // Static instance
-  static final ErrorCodeNotifier _instance = ErrorCodeNotifier._();
+  static final ErrorCodeNotifier _instance = ErrorCodeNotifier();
 
   // Factory constructor to return the same instance
   factory ErrorCodeNotifier() {

@@ -2,10 +2,9 @@ use std::str::FromStr;
 use validator::Validate;
 
 use flowy_derive::{ProtoBuf, ProtoBuf_Enum};
-use flowy_user_pub::cloud::{AFWorkspaceSettings, AFWorkspaceSettingsChange};
+use flowy_user_pub::cloud::{AFWorkspaceSettings, AFWorkspaceSettingsChange, SubscriptionPlan, SubscriptionStatus, WorkspaceSubscriptionStatus};
 use flowy_user_pub::entities::{
-  RecurringInterval, Role, SubscriptionPlan, WorkspaceInvitation, WorkspaceMember,
-  WorkspaceSubscription,
+  RecurringInterval, Role,  WorkspaceInvitation, WorkspaceMember,
 };
 use lib_infra::validator_fn::required_not_empty_str;
 
@@ -258,17 +257,22 @@ impl From<RecurringInterval> for RecurringIntervalPB {
 #[derive(ProtoBuf_Enum, Clone, Default, Debug)]
 pub enum SubscriptionPlanPB {
   #[default]
-  None = 0,
+  Free = 0,
   Pro = 1,
   Team = 2,
+  AIMax= 3,
+  AILocal= 4,
 }
+
 
 impl From<SubscriptionPlanPB> for SubscriptionPlan {
   fn from(value: SubscriptionPlanPB) -> Self {
     match value {
-      SubscriptionPlanPB::Pro => SubscriptionPlan::Pro,
-      SubscriptionPlanPB::Team => SubscriptionPlan::Team,
-      SubscriptionPlanPB::None => SubscriptionPlan::None,
+        SubscriptionPlanPB::Free => SubscriptionPlan::Free,
+        SubscriptionPlanPB::Pro => SubscriptionPlan::Pro,
+        SubscriptionPlanPB::Team => SubscriptionPlan::Team,
+        SubscriptionPlanPB::AIMax => SubscriptionPlan::AiMax,
+        SubscriptionPlanPB::AILocal => SubscriptionPlan::AiLocal,
     }
   }
 }
@@ -276,9 +280,11 @@ impl From<SubscriptionPlanPB> for SubscriptionPlan {
 impl From<SubscriptionPlan> for SubscriptionPlanPB {
   fn from(value: SubscriptionPlan) -> Self {
     match value {
-      SubscriptionPlan::Pro => SubscriptionPlanPB::Pro,
-      SubscriptionPlan::Team => SubscriptionPlanPB::Team,
-      SubscriptionPlan::None => SubscriptionPlanPB::None,
+        SubscriptionPlan::Free => SubscriptionPlanPB::Free,
+        SubscriptionPlan::Pro => SubscriptionPlanPB::Pro,
+        SubscriptionPlan::Team => SubscriptionPlanPB::Team,
+        SubscriptionPlan::AiMax => SubscriptionPlanPB::AIMax,
+        SubscriptionPlan::AiLocal => SubscriptionPlanPB::AILocal,
     }
   }
 }
@@ -316,15 +322,15 @@ pub struct WorkspaceSubscriptionPB {
   pub canceled_at: i64, // value is valid only if has_canceled is true
 }
 
-impl From<WorkspaceSubscription> for WorkspaceSubscriptionPB {
-  fn from(s: WorkspaceSubscription) -> Self {
+impl From<WorkspaceSubscriptionStatus> for WorkspaceSubscriptionPB {
+  fn from(s: WorkspaceSubscriptionStatus) -> Self {
     Self {
       workspace_id: s.workspace_id,
-      subscription_plan: s.subscription_plan.into(),
+      subscription_plan: s.workspace_plan.into(),
       recurring_interval: s.recurring_interval.into(),
-      is_active: s.is_active,
-      has_canceled: s.canceled_at.is_some(),
-      canceled_at: s.canceled_at.unwrap_or_default(),
+      is_active: matches!(s.subscription_status, SubscriptionStatus::Active),
+      has_canceled: s.cancel_at.is_some(),
+      canceled_at: s.cancel_at.unwrap_or_default(),
     }
   }
 }

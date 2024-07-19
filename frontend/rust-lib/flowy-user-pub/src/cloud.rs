@@ -9,13 +9,14 @@ use std::collections::HashMap;
 use std::fmt::{Display, Formatter};
 use std::str::FromStr;
 use std::sync::Arc;
+pub use client_api::entity::billing_dto::{ WorkspaceSubscriptionStatus, SubscriptionStatus, SubscriptionPlan} ;
 use tokio_stream::wrappers::WatchStream;
 use uuid::Uuid;
 
 use crate::entities::{
-  AuthResponse, Authenticator, RecurringInterval, Role, SubscriptionPlan, UpdateUserProfileParams,
+  AuthResponse, Authenticator, RecurringInterval, Role,  UpdateUserProfileParams,
   UserCredentials, UserProfile, UserTokenState, UserWorkspace, WorkspaceInvitation,
-  WorkspaceInvitationStatus, WorkspaceMember, WorkspaceSubscription, WorkspaceUsage,
+  WorkspaceInvitationStatus, WorkspaceMember,  WorkspaceUsage,
 };
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -281,7 +282,7 @@ pub trait UserCloudService: Send + Sync + 'static {
     FutureResult::new(async { Err(FlowyError::not_support()) })
   }
 
-  fn get_workspace_subscriptions(&self) -> FutureResult<Vec<WorkspaceSubscription>, FlowyError> {
+  fn get_workspace_subscriptions(&self) -> FutureResult<Vec<WorkspaceSubscriptionStatus>, FlowyError> {
     FutureResult::new(async { Err(FlowyError::not_support()) })
   }
 

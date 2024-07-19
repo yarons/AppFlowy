@@ -39,7 +39,7 @@ class SettingsBillingBloc
                     .firstWhereOrNull((i) => i.workspaceId == workspaceId) ??
                 WorkspaceSubscriptionPB(
                   workspaceId: workspaceId,
-                  subscriptionPlan: SubscriptionPlanPB.None,
+                  subscriptionPlan: SubscriptionPlanPB.Free,
                   isActive: true,
                 ),
             (e) {
@@ -47,7 +47,7 @@ class SettingsBillingBloc
               if (e.code == ErrorCode.InvalidParams) {
                 return WorkspaceSubscriptionPB(
                   workspaceId: workspaceId,
-                  subscriptionPlan: SubscriptionPlanPB.None,
+                  subscriptionPlan: SubscriptionPlanPB.Free,
                   isActive: true,
                 );
               }

@@ -10,9 +10,10 @@ use flowy_error::{ErrorCode, FlowyError, FlowyResult};
 use flowy_folder_pub::entities::{AppFlowyData, ImportData};
 use flowy_sqlite::schema::user_workspace_table;
 use flowy_sqlite::{query_dsl::*, DBConnection, ExpressionMethods};
+use flowy_user_pub::cloud::WorkspaceSubscriptionStatus;
 use flowy_user_pub::entities::{
   Role, UpdateUserProfileParams, UserWorkspace, WorkspaceInvitation, WorkspaceInvitationStatus,
-  WorkspaceMember, WorkspaceSubscription, WorkspaceUsage,
+  WorkspaceMember, WorkspaceUsage
 };
 use lib_dispatch::prelude::af_spawn;
 
@@ -446,7 +447,7 @@ impl UserManager {
   }
 
   #[instrument(level = "info", skip(self), err)]
-  pub async fn get_workspace_subscriptions(&self) -> FlowyResult<Vec<WorkspaceSubscription>> {
+  pub async fn get_workspace_subscriptions(&self) -> FlowyResult<Vec<WorkspaceSubscriptionStatus>> {
     let res = self
       .cloud_services
       .get_user_service()?
