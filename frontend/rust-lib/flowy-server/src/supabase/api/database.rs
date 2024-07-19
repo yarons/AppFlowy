@@ -6,6 +6,7 @@ use flowy_database_pub::cloud::{
   CollabDocStateByOid, DatabaseCloudService, DatabaseSnapshot, SummaryRowContent,
   TranslateRowContent, TranslateRowResponse,
 };
+use flowy_error::FlowyError;
 use lib_dispatch::prelude::af_spawn;
 use lib_infra::future::FutureResult;
 
@@ -29,10 +30,10 @@ where
   T: SupabaseServerService,
 {
   fn get_database_object_doc_state(
-    &self,
-    object_id: &str,
-    collab_type: CollabType,
-    _workspace_id: &str,
+      &self,
+      object_id: &str,
+      collab_type: CollabType,
+      workspace_id: &str,
   ) -> FutureResult<Option<Vec<u8>>, Error> {
     let try_get_postgrest = self.server.try_get_weak_postgrest();
     let object_id = object_id.to_string();
@@ -56,7 +57,7 @@ where
     &self,
     object_ids: Vec<String>,
     object_ty: CollabType,
-    _workspace_id: &str,
+    workspace_id: &str,
   ) -> FutureResult<CollabDocStateByOid, Error> {
     let try_get_postgrest = self.server.try_get_weak_postgrest();
     let (tx, rx) = channel();
@@ -100,19 +101,19 @@ where
 
   fn summary_database_row(
     &self,
-    _workspace_id: &str,
-    _object_id: &str,
-    _summary_row: SummaryRowContent,
-  ) -> FutureResult<String, Error> {
+    workspace_id: &str,
+    object_id: &str,
+    summary_row: SummaryRowContent,
+  ) -> FutureResult<String, FlowyError> {
     FutureResult::new(async move { Ok("".to_string()) })
   }
 
   fn translate_database_row(
     &self,
-    _workspace_id: &str,
-    _translate_row: TranslateRowContent,
-    _language: &str,
-  ) -> FutureResult<TranslateRowResponse, Error> {
+    workspace_id: &str,
+    translate_row: TranslateRowContent,
+    language: &str,
+  ) -> FutureResult<TranslateRowResponse, FlowyError> {
     FutureResult::new(async move { Ok(TranslateRowResponse::default()) })
   }
 }
