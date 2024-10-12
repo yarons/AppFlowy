@@ -169,11 +169,13 @@
     "question2": "הסבר על שיטת החתימה למטרה",
     "question3": "למה להשתמש ב־Rust",
     "question4": "מתכון ממה שיש לי במטבח",
-    "aiMistakePrompt": "בינה מלאכותית יכולה לטעות. כדאי לאשש את המידע."
+    "aiMistakePrompt": "בינה מלאכותית יכולה לטעות. כדאי לאשש את המידע.",
+    "questionDetail": "היי {}! איך אני יכול לעזור לך היום?"
   },
   "trash": {
     "text": "אשפה",
     "restoreAll": "שחזור של הכול",
+    "restore": "שחזור",
     "deleteAll": "מחיקה של הכול",
     "pageHeader": {
       "fileName": "שם קובץ",
@@ -187,6 +189,10 @@
     "confirmRestoreAll": {
       "title": "לשחזר את כל העמודים מהאשפה?",
       "caption": "זאת פעולה בלתי הפיכה."
+    },
+    "restorePage": {
+      "title": "שחזור: {}",
+      "caption": "לשחזר את העמוד הזה?"
     },
     "mobile": {
       "actions": "פעולות אשפה",
@@ -282,7 +288,8 @@
     "removeSuccess": "הוסר בהצלחה",
     "favoriteSpace": "מועדפים",
     "RecentSpace": "אחרונים",
-    "Spaces": "מרחבים"
+    "Spaces": "מרחבים",
+    "upgradeToPro": "שדרוג לפרו"
   },
   "notifications": {
     "export": {
